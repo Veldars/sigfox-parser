@@ -32,9 +32,7 @@ function parseMessage(data, format, conditions) {
   let parsedCond = null;
   if (conditions !== undefined) {
     conditions = parseConditions(conditions);
-    console.log(conditions);
     parsedCond = reduceConditions(conditions, types);
-    console.log(parsedCond);
   }
   let fields = parseFields(format);
 
@@ -85,7 +83,7 @@ function parseConditions(format) {
       type: split[2],
       length: split[3],
       endianness: typeof split[4] === 'undefined' ? 'big-endian' : split[4],
-      value: typeof split[5] === 'undefined' ? 1 : split[5]
+      value: typeof split[5] === 'undefined' ? true : split[5]
     }
   });
 }
@@ -113,7 +111,17 @@ function reduceConditions(conditions, types) {
 }
 
 function cleanFields(fields, conditions, parsedCond) {
+  for (let i = 0; i < conditions.length; i += 1) {
+    const cond = conditions[i];
+    if (parsedCond[cond.name] !== cond.value) {
+      const index = fields.findIndex(field => field.name === cond.name);
+      if (index !== -1) {
+        fields.splice(index, 1);
+      }
+    }
+  }
 
+  return fields;
 }
 
 module.exports = parseMessage;
