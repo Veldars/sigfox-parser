@@ -20,5 +20,10 @@
  * !! convert to bool
  */
 module.exports = function readBool (buffer, offset, position) {
+  console.log('toto : ' + position);
+  if (position == 0) {
+    console.log((1 << position));
+    console.log(!!(buffer.readInt8(offset) & (1 << position)));
+  }
   return !!(buffer.readInt8(offset) & (1 << position))
 }

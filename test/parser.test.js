@@ -1,7 +1,7 @@
 'use strict'
 
-var tap = require('tap')
-var parse = require('./../index')
+var tap = require('tap');
+var parse = require('./../index');
 
 var cases = [
   {
@@ -44,6 +44,12 @@ var cases = [
     data: '1E660382BA583FF426D609',
     format: 'Battery::uint:8 pH::uint:16:little-endian Conductivity::float:32:little-endian DO::uint:16:little-endian Temp::uint:16:little-endian',
     expected: { Battery: 30, pH: 870, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
+  },
+  {
+    data: '171E660382BA583FF426D609',
+    condition: 'Battery:0:bool:4 pH:0:bool:3 Conductivity:0:bool:2 DO:0:bool:1 Temp:0:bool:0',
+    format: 'Battery::uint:8 pH::uint:16:little-endian Conductivity::float:32:little-endian DO::uint:16:little-endian Temp::uint:16:little-endian',
+    expected: {Battery: 30, pH: 870, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
   }
 ]
 
@@ -51,7 +57,7 @@ cases.forEach(function (c) {
   tap.test('test format and expected values', function (t) {
     t.plan(1)
 
-    var result = parse(c.data, c.format)
+    var result = parse(c.data, c.format, c.condition)
     t.deepEqual(result, c.expected)
   })
 })

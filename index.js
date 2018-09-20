@@ -14,10 +14,10 @@ const _ = require('lodash')
  * uint (unsigned integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
  * int (signed integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
  */
-function parseMessage (data, format) {
+function parseMessage(data, format, conditions) {
   const buffer = Buffer.isBuffer(data)
     ? data
-    : new Buffer(data, 'hex')
+    : new Buffer(data, 'hex');
 
   const types = {
     'uint': _.curry(require('./readers/uint'))(buffer),
@@ -25,11 +25,22 @@ function parseMessage (data, format) {
     'float': _.curry(require('./readers/float'))(buffer),
     'bool': _.curry(require('./readers/bool'))(buffer),
     'char': _.curry(require('./readers/char'))(buffer)
-  }
-  let current = 0
-  let last = 0
+  };
+  let current = 0;
+  let last = 0;
 
-  const fields = parseFields(format);
+  let parsedCond = null;
+  if (conditions !== undefined) {
+    conditions = parseConditions(conditions);
+    console.log(conditions);
+    parsedCond = reduceConditions(conditions, types);
+    console.log(parsedCond);
+  }
+  let fields = parseFields(format);
+
+  if (parsedCond) {
+    fields = cleanFields(fields, conditions, parsedCond);
+  }
 
   return _.reduce(fields, (obj, field) => {
     let l = current
@@ -50,7 +61,7 @@ function parseMessage (data, format) {
   }, {})
 }
 
-function parseFields (format) {
+function parseFields(format) {
   const fields = format.trim().replace(/\s+/g, ' ').split(' ')
   return _.map(fields, field => {
     const split = field.split(':')
@@ -61,8 +72,49 @@ function parseFields (format) {
       length: split[3],
       endianness: typeof split[4] === 'undefined' ? 'big-endian' : split[4]
     }
-  })
+  });
 }
 
-module.exports = parseMessage
-module.exports.parseFields = parseFields
+function parseConditions(format) {
+  const fields = format.trim().replace(/\s+/g, ' ').split(' ')
+  return _.map(fields, field => {
+    const split = field.split(':')
+    return {
+      name: split[0],
+      offset: split[1],
+      type: split[2],
+      length: split[3],
+      endianness: typeof split[4] === 'undefined' ? 'big-endian' : split[4],
+      value: typeof split[5] === 'undefined' ? 1 : split[5]
+    }
+  });
+}
+
+function reduceConditions(conditions, types) {
+  let current = 0;
+  let last = 0;
+  return _.reduce(conditions, (obj, field) => {
+    let l = current
+    current += last
+    if (field.type !== 'bool') {
+      l = current
+    }
+
+    try {
+      obj[field.name] = types[field.type](field.offset || l, field.length, field.endianness);
+    } catch (e) {
+      // most off time parser fields too long for datas buffer
+      return obj;
+    }
+
+    last = field.length / (field.type === 'char' ? 1 : 8)
+    return obj
+  }, {})
+}
+
+function cleanFields(fields, conditions, parsedCond) {
+
+}
+
+module.exports = parseMessage;
+module.exports.parseFields = parseFields;
