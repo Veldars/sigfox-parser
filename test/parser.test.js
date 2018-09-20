@@ -6,7 +6,7 @@ var parse = require('./../index')
 var cases = [
   {
     data: '1234',
-    format: 'int1::uint:8 int2::uint:8',
+    format: 'int1::uint:8 int2::uint:8 int3::uint:8 int4::uint:8',
     expected: { int1: 0x12, int2: 0x34 }
   },
   {

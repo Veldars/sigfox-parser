@@ -29,7 +29,8 @@ function parseMessage (data, format) {
   let current = 0
   let last = 0
 
-  const fields = parseFields(format)
+  const fields = parseFields(format);
+
   return _.reduce(fields, (obj, field) => {
     let l = current
     current += last
@@ -37,7 +38,12 @@ function parseMessage (data, format) {
       l = current
     }
 
-    obj[field.name] = types[field.type](field.offset || l, field.length, field.endianness)
+    try {
+      obj[field.name] = types[field.type](field.offset || l, field.length, field.endianness);
+    } catch (e) {
+      // most off time parser fields too long for datas buffer
+      return obj;
+    }
 
     last = field.length / (field.type === 'char' ? 1 : 8)
     return obj

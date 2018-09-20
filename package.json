@@ -1,7 +1,7 @@
 {
-  "name": "sigfox-parser",
-  "version": "1.2.2",
-  "description": "A parser for Sigfox's custom grammar format",
+  "name": "cd-sigfox-parser",
+  "version": "1.0.0",
+  "description": "Based on sigfox-parser from Waylay <team@waylay.io>",
   "main": "index.js",
   "scripts": {
     "lint": "standard .",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/waylayio/sigfox-parser.git"
+    "url": "git+https://github.com/Veldars/sigfox-parser.git"
   },
-  "author": "Waylay <team@waylay.io>",
+  "author": "Veldars <crome1208@hotmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/waylayio/sigfox-parser/issues"
+    "url": "https://github.com/Veldars/sigfox-parser/issues"
   },
-  "homepage": "https://github.com/waylayio/sigfox-parser#readme",
+  "homepage": "https://github.com/Veldars/sigfox-parser#readme",
   "devDependencies": {
     "standard": "^8.0.0",
     "tap": "^6.3.0"
