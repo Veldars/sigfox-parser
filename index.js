@@ -24,7 +24,8 @@ function parseMessage(data, format, conditions) {
     'int': _.curry(require('./readers/int'))(buff),
     'float': _.curry(require('./readers/float'))(buff),
     'bool': _.curry(require('./readers/bool'))(buff),
-    'char': _.curry(require('./readers/char'))(buff)
+    'char': _.curry(require('./readers/char'))(buff),
+    'bcd': _.curry(require('./readers/bcd'))(buff)
   };
   let current = 0;
   let last = 0;
@@ -92,10 +93,10 @@ function reduceConditions(conditions, types) {
   let current = 0;
   let last = 0;
   return _.reduce(conditions, (obj, field) => {
-    let l = current
-    current += last
+    let l = current;
+    current += last;
     if (field.type !== 'bool') {
-      l = current
+      l = current;
     }
 
     try {
@@ -105,9 +106,9 @@ function reduceConditions(conditions, types) {
       return obj;
     }
 
-    last = field.length / (field.type === 'char' ? 1 : 8)
-    return obj
-  }, {})
+    last = field.length / (field.type === 'char' ? 1 : 8);
+    return obj;
+  }, {});
 }
 
 function cleanFields(fields, conditions, parsedCond) {

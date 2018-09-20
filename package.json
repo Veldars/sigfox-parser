@@ -1,6 +1,6 @@
 {
   "name": "cd-sigfox-parser",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Payload parser for lora or sigfox based on sigfox-parser from Waylay <team@waylay.io>",
   "main": "index.js",
   "scripts": {
@@ -24,5 +24,12 @@
   },
   "dependencies": {
     "lodash": "^4.11.1"
-  }
+  },
+  "keywords": [
+    "sigfox",
+    "lora",
+    "payload",
+    "parser",
+    "lpwan"
+  ]
 }

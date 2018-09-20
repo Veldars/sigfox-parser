@@ -54,7 +54,12 @@ var cases = [
     data: '171E82BA583FF426D609',
     condition: 'Battery:0:bool:4 pH:0:bool:3 Conductivity:0:bool:2 DO:0:bool:1 Temp:0:bool:0',
     format: 'Conditions::uint:8 Battery::uint:8 pH::uint:16:little-endian Conductivity::float:32:little-endian DO::uint:16:little-endian Temp::uint:16:little-endian',
-    expected: {Conditions:23, Battery: 30, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
+    expected: {Conditions: 23, Battery: 30, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
+  },
+  {
+    data: '9c2446099470006063901b18', // 9c 24 46099470 00606390 1b 18
+    format: 'statut::uint:8 temperature::uint:8 lat::bcd:32 lng::bcd:32 ul_count::uint:8 dl_count::uint:8',
+    expected: {statut:156, temperature: 36, lat: '46099470', lng: '00606390', ul_count: 27, dl_count: 24 }
   }
 ]
 
