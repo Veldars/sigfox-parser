@@ -1,7 +1,7 @@
 # cd-sigfox-parser
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
-[![Coverage Status](https://coveralls.io/repos/github/veldars/sigfox-parser/badge.svg?branch=master)](https://coveralls.io/github/veldars/sigfox-parser?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Veldars/sigfox-parser/badge.svg?branch=master)](https://coveralls.io/github/Veldars/sigfox-parser?branch=master)
 
 Sigfox and LoRa data parser used by https://ebeewan.com.
 
