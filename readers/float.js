@@ -11,13 +11,13 @@
 module.exports = function readFloat (buffer, offset, length, endian) {
   // big-endian (default)
   if (endian === 'big-endian') {
-    return length === 32
+    return (length === '32')
       ? buffer.readFloatBE(offset)
-      : buffer.readDoubleBE(offset)
+      : buffer.readDoubleBE(offset);
   }
 
   // little-endian
-  return (length === 64)
+  return (length === '64')
     ? buffer.readDoubleLE(offset)
-    : buffer.readFloatLE(offset)
+    : buffer.readFloatLE(offset);
 }

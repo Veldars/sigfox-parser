@@ -15,16 +15,16 @@ const _ = require('lodash')
  * int (signed integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
  */
 function parseMessage(data, format, conditions) {
-  const buffer = Buffer.isBuffer(data)
+  const buff = Buffer.isBuffer(data)
     ? data
     : new Buffer(data, 'hex');
 
   const types = {
-    'uint': _.curry(require('./readers/uint'))(buffer),
-    'int': _.curry(require('./readers/int'))(buffer),
-    'float': _.curry(require('./readers/float'))(buffer),
-    'bool': _.curry(require('./readers/bool'))(buffer),
-    'char': _.curry(require('./readers/char'))(buffer)
+    'uint': _.curry(require('./readers/uint'))(buff),
+    'int': _.curry(require('./readers/int'))(buff),
+    'float': _.curry(require('./readers/float'))(buff),
+    'bool': _.curry(require('./readers/bool'))(buff),
+    'char': _.curry(require('./readers/char'))(buff)
   };
   let current = 0;
   let last = 0;
