@@ -4,7 +4,9 @@
 [![Build Status](https://travis-ci.org/waylayio/sigfox-parser.svg?branch=master)](https://travis-ci.org/waylayio/sigfox-parser)
 [![Coverage Status](https://coveralls.io/repos/github/waylayio/sigfox-parser/badge.svg?branch=master)](https://coveralls.io/github/waylayio/sigfox-parser?branch=master)
 
-Sigfox and LoRa data parser used by https://ebeewan.com
+Sigfox and LoRa data parser used by https://ebeewan.com.
+
+Based on sigfox-parser from Waylay
 
 ## Usage
 
@@ -23,14 +25,15 @@ require('sigfox-parser')(<messagebytes>, <formatstring>, [<conditionstring>]);
 Example
 
 ```javascript
-var parsed = require('sigfox-parser')('C01234','b1::bool:7 b2::bool:6 i1:1:uint:16');
+const parser = require('cd-sigfox-parser');
 
+let parsed = parser('C01234','b1::bool:7 b2::bool:6 i1:1:uint:16');
 
 // Conditions, b1 and b2 are present but not i1
-var parsed = require('sigfox-parser')('06C0','status::uint:8 b1::bool:7 b2::bool:6 i1:1:uint:16', 'b1:0:bool:2 b2:0:bool:1 i1:0:bool:0');
+parsed = parser('06C0','status::uint:8 b1::bool:7 b2::bool:6 i1:1:uint:16', 'b1:0:bool:2 b2:0:bool:1 i1:0:bool:0');
 
 // Conditions, i1 and i3 are present but not i2
-var parsed = require('sigfox-parser')('0512341234','status::uint:8 i1::uint:16 i2::uint:16 i3:1:uint:16', 'i1:0:bool:2 i2:0:bool:1 i3:0:bool:0');
+parsed = parser('0512341234','status::uint:8 i1::uint:16 i2::uint:16 i3:1:uint:16', 'i1:0:bool:2 i2:0:bool:1 i3:0:bool:0');
 /**
   {
     status: 5,
@@ -55,7 +58,7 @@ The variable parsed now contains:
 ### Parse the syntax
 
 ```javascript
-var parser = require('sigfox-parser')
+var parser = require('cd.sigfox-parser')
 
 var fields = parser.parseFields('lightAmbi::uint:16 temperature:2:int:8')
 

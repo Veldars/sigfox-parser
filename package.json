@@ -1,7 +1,7 @@
 {
   "name": "cd-sigfox-parser",
-  "version": "1.0.1",
-  "description": "Based on sigfox-parser from Waylay <team@waylay.io>",
+  "version": "1.0.2",
+  "description": "Payload parser for lora or sigfox based on sigfox-parser from Waylay <team@waylay.io>",
   "main": "index.js",
   "scripts": {
     "lint": "standard .",
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/Veldars/sigfox-parser.git"
   },
-  "author": "Veldars <crome1208@hotmail.com>",
+  "author": "Veldars <veldars@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Veldars/sigfox-parser/issues"
