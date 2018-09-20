@@ -1,6 +1,6 @@
 {
   "name": "cd-sigfox-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Based on sigfox-parser from Waylay <team@waylay.io>",
   "main": "index.js",
   "scripts": {
