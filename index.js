@@ -41,6 +41,8 @@ function parseMessage(data, format, conditions) {
     fields = cleanFields(fields, conditions, parsedCond);
   }
 
+  if (!fields) return null;
+
   return _.reduce(fields, (obj, field) => {
     let l = current
     current += last
@@ -114,10 +116,23 @@ function reduceConditions(conditions, types) {
 function cleanFields(fields, conditions, parsedCond) {
   for (let i = 0; i < conditions.length; i += 1) {
     const cond = conditions[i];
+    switch (cond.type) {
+      case ('uint'):
+        try {
+          cond.value = parseInt(cond.value, 10);
+        } catch (error) {
+          // juste stay as it is...
+        }
+        break;
+      default:
+        break;
+    }
     if (parsedCond[cond.name] !== cond.value) {
       const index = fields.findIndex(field => field.name === cond.name);
       if (index !== -1) {
         fields.splice(index, 1);
+      } else if (cond.name === 'message') {
+        return null;
       }
     }
   }
