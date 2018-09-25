@@ -33,6 +33,9 @@ parsed = parser('06C0','status::uint:8 b1::bool:7 b2::bool:6 i1:1:uint:16', 'b1:
 
 // Conditions, i1 and i3 are present but not i2
 parsed = parser('0512341234','status::uint:8 i1::uint:16 i2::uint:16 i3:1:uint:16', 'i1:0:bool:2 i2:0:bool:1 i3:0:bool:0');
+
+// Conditions, if the first byte is not equale to 15 the parser return null
+parsed = parser('0512341234','status::uint:8 i1::uint:16 i2::uint:16 i3:1:uint:16', 'message::uint:8::15');
 /**
   {
     status: 5,
