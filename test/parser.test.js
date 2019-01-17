@@ -72,6 +72,18 @@ var cases = [
     data: '9c2446099470006063901b18', // 9c 24 46099470 00606390 1b 18
     format: 'statut::uint:8 temperature::uint:8 lat::bcd:32 lng::bcd:32 ul_count::uint:8 dl_count::uint:8',
     expected: {statut:156, temperature: 36, lat: '46099470', lng: '00606390', ul_count: 27, dl_count: 24 }
+  },
+  {
+    data: '0100e202290400270506060308070d62', // test included condition like for Elsys
+    condition: 'temperature::hex:8::01 humidity::hex:8::02 light::hex:8::04 motion::hex:8::05 co2::hex:8::06 vdd::hex:8::07',
+    format: 'light::uint:16 temperature::uint:16 humidity::uint:8 motion::uint:8 co2::uint:16 vdd::uint:16',
+    expected: {temperature:226, humidity: 41, light: 39, motion: 6, co2: 776, vdd: 3426 }
+  },
+  {
+    data: '0501', // test included condition like for Elsys
+    condition: 'temperature::hex:8::01 humidity::hex:8::02 light::hex:8::04 motion::hex:8::05 co2::hex:8::06 vdd::hex:8::07',
+    format: 'light::uint:16 temperature::uint:16 humidity::uint:8 motion::uint:8 co2::uint:16 vdd::uint:16',
+    expected: { motion:1 }
   }
 ]
 
@@ -83,6 +95,7 @@ cases.forEach(function (c) {
     t.deepEqual(result, c.expected)
   })
 })
+
 
 tap.test('test uinttypes', function (t) {
   t.plan(1)
@@ -170,6 +183,21 @@ tap.test('test bools', function (t) {
 
   var data = buffer.toString('hex')
   var result = parse(data, 'b1:0:bool:7 b2:0:bool:6 b3:0:bool:5 b4:0:bool:4 b5:0:bool:3 b6:0:bool:2 b7:0:bool:1 b8:0:bool:0')
+  t.deepEqual(result, expected)
+})
+
+tap.test('test hex', function (t) {
+  t.plan(1)
+
+  var expected = {
+    h1: "01",
+    h2: "B7C6",
+    h3: "6F",
+  }
+  var buffer = "01B7C66F";
+
+  var data = buffer.toString('hex')
+  var result = parse(data, 'h1::hex:8 h2::hex:16 h3::hex:8')
   t.deepEqual(result, expected)
 })
 

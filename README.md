@@ -57,6 +57,42 @@ The variable parsed now contains:
 }
 ```
 
+## New HEX condition
+
+Now you can parse message with conditionnal hex value to defined field included in payload.
+
+E.g : Temperature is preceded by 0x01 and humidity by 0x02
+
+```javascript
+
+// simple example
+parsed = parser('0100e20229','temperature::uint:16 humidity::uint:8', 'temperature::hex:8::01 humidity::hex:8::02');
+/**
+  {
+    temperature: 226,
+    humidity: 41
+  }
+**/
+
+// reverse order in payload
+parsed = parser('02290100e2','temperature::uint:16 humidity::uint:8', 'temperature::hex:8::01 humidity::hex:8::02');
+/**
+  {
+    temperature: 226,
+    humidity: 41
+  }
+**/
+
+// missing fields
+parsed = parser('0100e2','temperature::uint:16 humidity::uint:8', 'temperature::hex:8::01 humidity::hex:8::02');
+/**
+  {
+    temperature: 226
+  }
+**/
+
+```
+
 ### Parse the syntax
 
 ```javascript
@@ -103,5 +139,6 @@ It is defined by its name, its position in the message bytes, its length, its ty
 * float : parameters are the length in bits of the value, which can be either 32 or 64 bits, and optionally the endianness for multi-bytes floats. Default is big endian. Decoding is done according to the IEEE 754 standard.
 * uint (unsigned integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
 * int (signed integer) : parameters are the number of bits to include in the value, and optionally the endianness for multi-bytes integers. Default is big endian.
+* hex (hexadecimal) : parameters are the length in bits of the value(always 8 for now)
 
 _(cfr. Sigfox documentation)_

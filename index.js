@@ -25,23 +25,29 @@ function parseMessage(data, format, conditions) {
     'float': _.curry(require('./readers/float'))(buff),
     'bool': _.curry(require('./readers/bool'))(buff),
     'char': _.curry(require('./readers/char'))(buff),
-    'bcd': _.curry(require('./readers/bcd'))(buff)
+    'bcd': _.curry(require('./readers/bcd'))(buff),
+    'hex': _.curry(require('./readers/hex'))(buff)
   };
   let current = 0;
   let last = 0;
 
   let parsedCond = null;
+  let hexFields = null;
+  let fields = parseFields(format);
+
   if (conditions !== undefined) {
     conditions = parseConditions(conditions);
     parsedCond = reduceConditions(conditions, types);
+    hexFields = reduceHexCondition(buff, fields, conditions, types);
   }
-  let fields = parseFields(format);
 
-  if (parsedCond) {
+  if (parsedCond && !hexFields) {
     fields = cleanFields(fields, conditions, parsedCond);
   }
 
   if (!fields) return null;
+
+  if (hexFields) fields = hexFields;
 
   return _.reduce(fields, (obj, field) => {
     let l = current
@@ -89,6 +95,31 @@ function parseConditions(format) {
       value: typeof split[5] === 'undefined' ? true : split[5]
     }
   });
+}
+
+function reduceHexCondition(buff, fields, conditions, types) {
+  let bufferIndex = 0;
+  const resultFields = [];
+  while (buff.length > bufferIndex) {
+    try {
+      const actCond = types['hex'](bufferIndex, 8);
+      if (actCond !== null) {
+        const condIndex = conditions.findIndex(cdt => cdt.value === actCond && cdt.type === 'hex');
+        if (condIndex !== null) {
+          const fieldIndex = fields.findIndex(field => field.name === conditions[condIndex].name);
+          if (fieldIndex !== null) {
+            fields[fieldIndex].offset = (bufferIndex + 1);
+            bufferIndex += (fields[fieldIndex].length / 8);
+            resultFields.push(fields[fieldIndex]);
+          } else return null;
+        } else return null;
+      } else return null;
+    } catch(err) {
+      return null;
+    }
+    bufferIndex += 1;
+  }
+  return resultFields;
 }
 
 function reduceConditions(conditions, types) {
