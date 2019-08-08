@@ -57,7 +57,8 @@ function parseMessage(data, format, conditions) {
     }
 
     try {
-      obj[field.name] = types[field.type](field.offset || l, field.length, field.endianness);
+      const offset = parseInt(field.offset || l, 10);
+      obj[field.name] = types[field.type](offset, field.length, field.endianness);
     } catch (e) {
       // most off time parser fields too long for datas buffer
       return obj;
@@ -133,7 +134,8 @@ function reduceConditions(conditions, types) {
     }
 
     try {
-      obj[field.name] = types[field.type](field.offset || l, field.length, field.endianness);
+      const offset = parseInt(field.offset || l, 10);
+      obj[field.name] = types[field.type](offset, field.length, field.endianness);
     } catch (e) {
       // most off time parser fields too long for datas buffer
       return obj;
