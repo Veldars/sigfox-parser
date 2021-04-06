@@ -1,6 +1,6 @@
 {
   "name": "cd-sigfox-parser",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Payload parser for lora or sigfox based on sigfox-parser from Waylay <team@waylay.io>",
   "main": "index.js",
   "scripts": {
