@@ -4,7 +4,7 @@ var tap = require('tap');
 var parse = require('./../index');
 
 var cases = [
-  {
+ {
     data: '1234',
     format: 'int1::uint:8 int2::uint:8 int3::uint:8 int4::uint:8',
     expected: { int1: 0x12, int2: 0x34 }
@@ -41,14 +41,14 @@ var cases = [
     expected: { lightAmbi: 5907, temperature: 24 }
   },
   {
-    data: '1E66033F58BA82F426D609', // 1E 6603 3F58BA82 F426 D609
+    data: '1F66033F58BA82F426D609', // 1F 6603 3F58BA82 F426 D609
     format: 'Battery::uint:8 pH::uint:16:little-endian Conductivity::float:32 DO::uint:16:little-endian Temp::uint:16:little-endian',
-    expected: { Battery: 30, pH: 870, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
+    expected: { Battery: 31, pH: 870, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
   },
   {
-    data: '1E660382BA583FF426D609',
+    data: '20660382BA583FF426D609',
     format: 'Battery::uint:8 pH::uint:16:little-endian Conductivity::float:32:little-endian DO::uint:16:little-endian Temp::uint:16:little-endian',
-    expected: { Battery: 30, pH: 870, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
+    expected: { Battery: 32, pH: 870, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
   },
   {
     data: '171E82BA583FF426D609',
@@ -63,10 +63,10 @@ var cases = [
     expected: null
   },
   {
-    data: '1E660382BA583FF426D609',
-    condition: 'message::uint:8::30',
-    format: 'Battery::uint:8 pH::uint:16:little-endian Conductivity::float:32:little-endian DO::uint:16:little-endian Temp::uint:16:little-endian',
-    expected: { Battery: 30, pH: 870, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
+    data: '1D660382BA583FF426D609',
+    condition: 'message::uint:8::29',
+    format: 'message::uint:8 Battery::uint:8 pH::uint:16:little-endian Conductivity::float:32:little-endian DO::uint:16:little-endian Temp::uint:16:little-endian',
+    expected: { Battery: 29, pH: 870, Conductivity: 0.8465958833694458, DO: 9972, Temp: 2518 }
   },
   {
     data: '9c2446099470006063901b18', // 9c 24 46099470 00606390 1b 18
@@ -84,6 +84,12 @@ var cases = [
     condition: 'temperature::hex:8::01 humidity::hex:8::02 light::hex:8::04 motion::hex:8::05 co2::hex:8::06 vdd::hex:8::07',
     format: 'light::uint:16 temperature::uint:16 humidity::uint:8 motion::uint:8 co2::uint:16 vdd::uint:16',
     expected: { motion:1 }
+  },
+  {
+    data: '2001128901170bbb',
+    condition: 'pio0:3:bool:7 pio1:3:bool:6 pio2:3:bool:5 pio3:3:bool:4 int_temp:3:bool:3 ext_temp:3:bool:2 vbat:3:bool:1 vext:3:bool:0',
+    format: 'cmd::uint:8 hours::uint:8 minutes::uint:8 status::uint:8 pio0::uint:8 pio1::uint:8 pio2::uint:12 pio3::uint:12 int_temp::int:12 ext_temp::int:12 vbat::int:12 vext::int:12',
+    expected: { cmd: 32, hours: 1, minutes: 18, pio0: 1, status: 137, int_temp: 368, vext: 3003}
   }
 ]
 
@@ -91,7 +97,7 @@ cases.forEach(function (c) {
   tap.test('test format and expected values', function (t) {
     t.plan(1)
 
-    var result = parse(c.data, c.format, c.condition)
+    var result = parse(c.data, c.format, c.condition);
     t.deepEqual(result, c.expected)
   })
 })

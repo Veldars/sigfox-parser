@@ -30,6 +30,7 @@ function parseMessage(data, format, conditions) {
   };
   let current = 0;
   let last = 0;
+  let mod = 0;
 
   let parsedCond = null;
   let hexFields = null;
@@ -56,16 +57,24 @@ function parseMessage(data, format, conditions) {
       l = current
     }
 
+    const len = parseInt(field.length, 10);
+
     try {
       const offset = parseInt(field.offset || l, 10);
-      obj[field.name] = types[field.type](offset, field.length, field.endianness);
+      obj[field.name] = types[field.type](offset, len, field.endianness, mod);
     } catch (e) {
       // most off time parser fields too long for datas buffer
       return obj;
     }
-
-    last = field.length / (field.type === 'char' ? 1 : 8)
-    return obj
+    last = len / (field.type === 'char' ? 1 : 8);
+    if (field.type === 'int' || field.type === 'uint') {
+      mod += len % 8;
+      if (mod >= 8) {
+        last += 1;
+        mod -= 8;
+      }
+    }
+    return obj;
   }, {})
 }
 
